@@ -40,7 +40,10 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                '/movie/<id:[0-9]+>'=>'/movie/show'
+                '/movie/<id:[0-9]+>'=>'/movie/show',
+		'/movie/director/<id:[0-9]+>'=>'/movie/director',
+                '/movie/actor/<id:[0-9]+>'=>'/movie/actor',
+                '/movie/category/<id:[0-9]+>'=>'/movie/category'
             ],
         ],
     ],

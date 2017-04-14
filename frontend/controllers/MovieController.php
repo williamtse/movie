@@ -10,6 +10,7 @@ namespace frontend\controllers;
 use common\models\Movie;
 use yii\web\Controller;
 use Yii;
+use common\models\MovieDirector;
 
 class MovieController extends Controller
 {
@@ -17,10 +18,79 @@ class MovieController extends Controller
         if(!$id=Yii::$app->request->get('id')){
             \Symfony\Component\Debug\header('页面丢失了',true,404);
         }
+        
         $movie = Movie::findOne($id);
-
+        
+        $sql = "SELECT md.*,d.name FROM movie_director md LEFT JOIN director d ON d.id="
+                . "md.did WHERE md.mid=$id";
+        $cmd = \Yii::$app->db->createCommand($sql);
+        $directors = $cmd->queryAll();
+        
+        $sql = "SELECT md.*,d.name FROM movie_actor md LEFT JOIN actor d ON d.id="
+                . "md.aid WHERE md.mid=$id";
+        $cmd = \Yii::$app->db->createCommand($sql);
+        $actors = $cmd->queryAll();
+        
+        $sql = "SELECT md.*,d.name FROM movie_category md LEFT JOIN category d ON d.id="
+                . "md.cid WHERE md.mid=$id";
+        $cmd = \Yii::$app->db->createCommand($sql);
+        $categories = $cmd->queryAll();
+        
         return $this->render('show',[
-            'movie'=>$movie
+            'movie'=>$movie,
+            'directors' => $directors,
+            'actors'=>$actors,
+            'categories'=>$categories
+        ]);
+    }
+    public function actionDirector(){
+        $id = \Yii::$app->request->get('id');
+        if(!$id){
+            \Symfony\Component\Debug\header('页面丢失了',true,404);
+        }
+        $page = \Yii::$app->request->get('page',1);
+        $rows = \Yii::$app->request->get('rows',20);
+        $limit = "LIMIT ".($page-1)*$rows.",$rows";
+        $sql = "SELECT md.*,m.* FROM movie_director md LEFT JOIN movie m ON "
+                . "md.mid=m.id WHERE md.did=$id $limit";
+        $cmd = \Yii::$app->db->createCommand($sql);
+        $movies = $cmd->queryAll();
+        return $this->render('movie_director',[
+            'movies'=>$movies
+        ]);
+    }
+    
+    public function actionActor(){
+        $id = \Yii::$app->request->get('id');
+        if(!$id){
+            \Symfony\Component\Debug\header('页面丢失了',true,404);
+        }
+        $page = \Yii::$app->request->get('page',1);
+        $rows = \Yii::$app->request->get('rows',20);
+        $limit = "LIMIT ".($page-1)*$rows.",$rows";
+        $sql = "SELECT ma.*,m.* FROM movie_actor ma LEFT JOIN movie m ON "
+                . "ma.mid=m.id WHERE ma.aid=$id $limit";
+        $cmd = \Yii::$app->db->createCommand($sql);
+        $movies = $cmd->queryAll();
+        return $this->render('movie_actor',[
+            'movies'=>$movies
+        ]);
+    }
+    
+    public function actionCategory(){
+        $id = \Yii::$app->request->get('id');
+        if(!$id){
+            \Symfony\Component\Debug\header('页面丢失了',true,404);
+        }
+        $page = \Yii::$app->request->get('page',1);
+        $rows = \Yii::$app->request->get('rows',20);
+        $limit = "LIMIT ".($page-1)*$rows.",$rows";
+        $sql = "SELECT mc.*,m.* FROM movie_category mc LEFT JOIN movie m ON "
+                . "mc.mid=m.id WHERE mc.cid=$id $limit";
+        $cmd = \Yii::$app->db->createCommand($sql);
+        $movies = $cmd->queryAll();
+        return $this->render('movie_category',[
+            'movies'=>$movies
         ]);
     }
 }

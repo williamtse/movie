@@ -19,6 +19,7 @@ use yii\widgets\ActiveForm;
     <?=$form->field($model, 'poster')->textInput()?>
     <?= $form->field($model, 'year')->textInput(['id'=>'poster']) ?>
     <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'abstract')->textInput() ?>
     <?= $form->field($model, 'showTime')->textInput(['maxlength' => true]) ?>
     <?= $form->field($model, 'keywords')->textInput(['maxlength' => true]) ?>
     <div class="form-group field-poster required">
@@ -39,7 +40,7 @@ use yii\widgets\ActiveForm;
                value="<?=$actors?implode('/',$actors):''?>" aria-required="true">
         <div class="help-block"></div>
     </div>
-    <?= $form->field($model, 'content')->textarea(['rows' => 6,'id'=>'editor-trigger']) ?>
+    <?= $form->field($model, 'content')->textarea(['rows' => 6,'id'=>'editor-trigger','style'=>'height:800px']) ?>
 
 
 

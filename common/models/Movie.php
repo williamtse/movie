@@ -17,6 +17,7 @@ use Yii;
  * @property integer $updated_at
  * @property string $keywords
  * @property string $poster
+ * @property string $abstract
  *
  * @property MovieActor[] $movieActors
  * @property MovieBt[] $movieBts
@@ -42,7 +43,7 @@ class Movie extends \yii\db\ActiveRecord
             [['name', 'year', 'title', 'poster'], 'required'],
             [['year', 'created_at', 'updated_at'], 'integer'],
             [['content'], 'string'],
-            [['name', 'title', 'showTime', 'keywords', 'poster'], 'string', 'max' => 255],
+            [['name', 'title', 'showTime', 'keywords', 'poster', 'abstract'], 'string', 'max' => 255],
         ];
     }
 
@@ -62,6 +63,7 @@ class Movie extends \yii\db\ActiveRecord
             'updated_at' => 'Updated At',
             'keywords' => 'Keywords',
             'poster' => 'Poster',
+            'abstract' => 'Abstract',
         ];
     }
 
@@ -97,3 +99,4 @@ class Movie extends \yii\db\ActiveRecord
         return $this->hasMany(MovieDirector::className(), ['mid' => 'id']);
     }
 }
+

@@ -30,11 +30,12 @@ function implodeArr($arr){
     }
     return $res;
 }
-function saveinfos(){
+function saveinfos($model){
     $categories = explode('/',Yii::$app->request->post('categories'));
     $actors = explode('/',Yii::$app->request->post('actors'));
     $directors = explode('/',Yii::$app->request->post('directors'));
     foreach ($categories as $cate){
+        $cate = trim($cate);
         $category=Category::findOne(['name'=>$cate]);
         if(!$category){
             $category = new Category();
@@ -55,6 +56,7 @@ function saveinfos(){
     }
 
     foreach ($actors as $act){
+        $act = trim($act);
         $actor=Actor::findOne(['name'=>$act]);
         if(!$actor){
             $actor = new Actor();
@@ -73,6 +75,7 @@ function saveinfos(){
     }
 
     foreach ($directors as $dire){
+        $dire = trim($dire);
         $director=Director::findOne(['name'=>$dire]);
         if(!$director){
             $director = new Director();
@@ -104,7 +107,7 @@ class MovieController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'delete' => ['POST'],
+                    // 'delete' => ['POST'],
                     'upload_poster'=>['POST']
                 ],
             ],
@@ -153,9 +156,8 @@ class MovieController extends Controller
     {
         $model = new Movie();
 
-
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            saveinfos();
+            saveinfos($model);
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
@@ -183,7 +185,7 @@ class MovieController extends Controller
         $cmd = Yii::$app->db->createCommand($sql);
         $dires = implodeArr($cmd->queryAll());
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            saveinfos();
+            saveinfos($model);
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
@@ -224,3 +226,4 @@ class MovieController extends Controller
         }
     }
 }
+

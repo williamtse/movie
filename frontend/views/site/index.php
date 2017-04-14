@@ -34,13 +34,13 @@
                 </div>
             </div>
 
-            <?php foreach($newmovies as $m){?>
+	<?php foreach($newmovies as $m){?>
                 <article class="excerpt excerpt-1" style="">
                     <a class="focus" href="/movie/<?=$m['id']?>" title="<?=$m['title']?>" target="_blank" >
                         <img class="thumb" data-original="<?=$m['poster']?>" src="<?=$m['poster']?>"
                              alt="<?=$m['title']?>"  style="display: inline;"></a>
                     <header><a class="cat" href="/movie/<?=$m['id']?>" title="<?=$m['name']?>" ><?=$m['name']?><i></i></a>
-                        <h2><a href="#" title="<?=$m['title']?>" target="_blank" ><?=$m['title']?></a>
+                        <h2><a href="/movie/<?=$m['id']?>" title="<?=$m['title']?>" target="_blank" ><?=$m['title']?></a>
                         </h2>
                     </header>
                     <p class="meta">
@@ -48,10 +48,9 @@
                         <span class="views"><i class="glyphicon glyphicon-eye-open"></i> 216</span>
                         <a class="comment" href="##comment" title="评论" target="_blank" ><i class="glyphicon glyphicon-comment"></i> 4</a>
                     </p>
-                    <p class="note"><?=$m['content']?></p>
+                    <p class="note"><?=$m['abstract']?></p>
                 </article>
             <?php }?>
-
             <nav class="pagination" style="display: none;">
                 <ul>
                     <li class="prev-page"></li>

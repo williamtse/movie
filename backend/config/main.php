@@ -15,7 +15,7 @@ return [
         'admin'=>[
             'class' => 'mdm\admin\Module',
             'layout' => 'left-menu',
-//            'mainLayout' => '@app/views/layouts/main.php',
+//           'mainLayout' => '@app/views/layouts/main.php',
         ],
         'adminb'=>[
             'class'=>'backend\modules\adminb\Adminb'
@@ -42,6 +42,7 @@ return [
         ]
     ],
     'components' => [
+/*
         'assetManager' => [
             'bundles' => [
                 'yii\web\JqueryAsset' => [
@@ -50,6 +51,7 @@ return [
                 ],
             ],
         ],
+*/
         'authManager' => [
             'class' => 'yii\rbac\DbManager', // or use 'yii\rbac\DbManager'
         ],

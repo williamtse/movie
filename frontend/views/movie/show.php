@@ -5,8 +5,8 @@
  * Date: 2017/4/13
  * Time: 23:27
  */
-$this->title = $movie->keywords;
 ?>
+
 <section class="container">
     <div class="content-wrap">
         <div class="content">
@@ -30,9 +30,38 @@ $this->title = $movie->keywords;
                     </span> <span class="item article-meta-views" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="浏览量：219"><i class="glyphicon glyphicon-eye-open"></i> 219</span> <span class="item article-meta-comment" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="评论量"><i class="glyphicon glyphicon-comment"></i> 4</span> </div>
             </header>
             <article class="article-content">
+		<?php if(isset($directors)){ ?>
+                <p>@导演：
+                <?php 
+                    foreach($directors as $d){
+                        ?>
+                        <a href="/movie/director/<?=$d['did']?>"><?=$d['name']?></a>
+                        <?php
+                    }
+                ?>
+                    <p>
+		<?php } ?>
+		<?php if(isset($actors)){ ?>
+                <p>@演员：<?php 
+                    foreach($actors as $a){
+                        ?>
+                        <a href="/movie/actor/<?=$a['aid']?>"><?=$a['name']?></a>
+                        <?php
+                    }
+                ?><p>
+		<?php } ?>
                 <?=$movie['content']?>
             </article>
-            <div class="article-tags">标签：<a href="#list/2/" rel="tag" >DTcms博客</a><a href="#list/3/" rel="tag" >木庄网络博客</a><a href="#list/4/" rel="tag" >独立博客</a><a href="#list/5/" rel="tag" >修复优化</a>
+            <div class="article-tags">标签：
+                <?php
+		    if(isset($categories)){ 
+                    foreach($categories as $c){
+                        ?>
+                        <a href="/movie/category/<?=$c['cid']?>" rel="tag" ><?=$c['name']?></a>
+                        <?php
+                    }
+			}
+                ?>
             </div>
             <div class="relates">
                 <div class="title">
@@ -172,3 +201,8 @@ $this->title = $movie->keywords;
     </aside>
 </section>
 
+<style>
+    .article-content pre{
+        background: "#fdfddf"
+    }
+</style>
