@@ -140,7 +140,7 @@ $profile = \backend\modules\adminb\models\AdminProfile::findOne(['adminId'=>\Yii
                   <ul class="dropdown-menu dropdown-usermenu pull-right">
                     <li><a href="<?=Url::toRoute(['/adminb/default/index'])?>"> Profile(个人资料)</a></li>
                     <li>
-                      <a href="<?=Url::toRoute(['/adminb/default/resetpwd'])?>">
+                      <a href="<?=Url::toRoute(['/adminb/default/request-password-reset'])?>">
                         <span>修改密码</span>
                       </a>
                     </li>
