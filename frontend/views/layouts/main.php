@@ -46,7 +46,7 @@
             data-target="#header-navbar" aria-expanded="false">
         <span class="sr-only"></span> <span class="icon-bar"></span>
         <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
-    <h1 class="logo hvr-bounce-in"><a href="#" title="电影天堂">
+    <h1 class="logo hvr-bounce-in"><a href="/" title="电影天堂">
             <img src="/logo.jpg" alt="电影天堂" height="50px"></a>
     </h1>
   </div>
