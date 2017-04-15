@@ -13,7 +13,7 @@
 <link rel="stylesheet" type="text/css" href="/css/style.css">
 <link rel="stylesheet" type="text/css" href="/css/font-awesome.min.css">
 <link rel="apple-touch-icon-precomposed" href="/images/icon.png">
-<link rel="shortcut icon" href="/images/favicon.ico">
+<link rel="shortcut icon" href="/favicon.ico">
 <script src="/js/jquery-2.1.4.min.js"></script>
 <script src="/js/nprogress.js"></script>
 <script src="/js/jquery.lazyload.min.js"></script>
