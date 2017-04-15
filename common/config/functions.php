@@ -13,6 +13,7 @@ use common\models\MovieActor;
 use common\models\MovieDirector;
 use common\models\Category;
 use common\models\MovieCategory;
+use app\components\Simpledom;
 
 function console_log($msg, $level = 0) {
     $os = PHP_OS;
