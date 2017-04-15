@@ -96,20 +96,23 @@ class DoubanController extends \yii\console\Controller
         }
 
         //演员
-        $actor_attr = $attrs[2];
-        $actors = [];
-        foreach($actor_attr->find('a') as $actor_link){
-            $actor_href = $actor_link->getAttribute('href');
-            $actor_id = explode('/',$actor_href)[2];
-            $actor_name= trim($actor_link->plaintext);
-            console_log("演员：$actor_name | $actor_id");
-            $actor_avatar = $this->_get_pepoe_info($actor_id);
-            $actors[]=[
-                'avatar'=>$actor_avatar,
-                'name'=>$actor_name,
-                'id'=>$actor_id
-            ];
+        if(isset($attrs[2])){
+            $actor_attr = $attrs[2];
+            $actors = [];
+            foreach($actor_attr->find('a') as $actor_link){
+                $actor_href = $actor_link->getAttribute('href');
+                $actor_id = explode('/',$actor_href)[2];
+                $actor_name= trim($actor_link->plaintext);
+                console_log("演员：$actor_name | $actor_id");
+                $actor_avatar = $this->_get_pepoe_info($actor_id);
+                $actors[]=[
+                    'avatar'=>$actor_avatar,
+                    'name'=>$actor_name,
+                    'id'=>$actor_id
+                ];
+            }
         }
+
         //类型
         $categories = [];
         foreach($dom->find('span[property="v:genre"]') as $category_span){
