@@ -40,5 +40,21 @@ $this->params['breadcrumbs'][] = $this->title;
             'poster',
         ],
     ]) ?>
+    <h3>下载链接</h3>
+    <table class="table">
 
+
+    <?php
+    if($urls){
+        foreach($urls as $url){
+            ?>
+            <tr>
+                <td style="word-wrap:break-word"><?=$url->title?></td>
+                <td><a href="/movie/movie/delete-bt?id=<?=$url->id?>">删除</a></td>
+            </tr>
+    <?php
+        }
+    }
+    ?></table>
+<p><a class="btn btn-primary" href="/movie/movie/addbt?id=<?=$model->id?>">添加bt下载</a></p>
 </div>

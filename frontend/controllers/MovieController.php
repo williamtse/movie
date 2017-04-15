@@ -9,6 +9,7 @@
 namespace frontend\controllers;
 use common\models\Movie;
 use common\models\Category;
+use common\models\MovieBt;
 use yii\web\Controller;
 use Yii;
 use common\models\MovieDirector;
@@ -17,12 +18,39 @@ use common\models\Director;
 
 class MovieController extends Controller
 {
-    public $breadcrumbs=[[
-		'label'=>'电影',
-		'url'=>'movie/index'
-	]];
-    public function actionShow(){
-        if(!$id=Yii::$app->request->get('id')){
+    public $breadcrumbs=[];
+    public $rows=15;
+    public $page=1;
+    public $limit='';
+    public $tags=[];
+    public function init()
+    {
+        parent::init();
+        $this->breadcrumbs[]=[
+            'label'=>'电影',
+            'url'=>'/movie/index'
+        ];
+        $this->rows = Yii::$app->request->get('rows',$this->rows);
+        $this->page = Yii::$app->request->get('page',$this->page);
+        $this->limit = "LIMIT ".($this->page-1)*$this->rows.",{$this->rows}";
+        $sql = "SELECT count(mc.cid) as total,c.name,c.id FROM movie_category mc LEFT JOIN category c 
+                ON c.id=mc.cid GROUP BY mc.cid";
+        $cmd = \Yii::$app->db->createCommand($sql);
+        $this->tags = $cmd->queryAll();
+    }
+
+    public function actionIndex(){
+        $sql = "SELECT m.* FROM movie m {$this->limit}";
+        $cmd = \Yii::$app->db->createCommand($sql);
+        $movies = $cmd->queryAll();
+        return $this->render('index',[
+            'movies'=>$movies,
+            'breadcrumbs'=>$this->breadcrumbs,
+            'tags'=>$this->tags
+        ]);
+    }
+    public function actionShow($id){
+        if(!$id){
             \Symfony\Component\Debug\header('页面丢失了',true,404);
         }
         
@@ -42,12 +70,15 @@ class MovieController extends Controller
                 . "md.cid WHERE md.mid=$id";
         $cmd = \Yii::$app->db->createCommand($sql);
         $categories = $cmd->queryAll();
-        
+
+        $urls = MovieBt::findAll(['mid'=>$id]);
         return $this->render('show',[
             'movie'=>$movie,
             'directors' => $directors,
             'actors'=>$actors,
-            'categories'=>$categories
+            'categories'=>$categories,
+            'tags'=>$this->tags,
+            'urls'=>$urls
         ]);
     }
     public function actionDirector(){
@@ -55,8 +86,8 @@ class MovieController extends Controller
         if(!$id){
             \Symfony\Component\Debug\header('页面丢失了',true,404);
         }
-	$director = Director::findOne($id);
-	$this->breadcrumbs[]=['label'=>$director->name];
+        $director = Director::findOne($id);
+        $this->breadcrumbs[]=['label'=>$director->name];
         $page = \Yii::$app->request->get('page',1);
         $rows = \Yii::$app->request->get('rows',20);
         $limit = "LIMIT ".($page-1)*$rows.",$rows";
@@ -66,7 +97,8 @@ class MovieController extends Controller
         $movies = $cmd->queryAll();
         return $this->render('list',[
             'movies'=>$movies,
-	    'breadcrumbs'=>$this->breadcrumbs
+	        'breadcrumbs'=>$this->breadcrumbs,
+            'tags'=>$this->tags
         ]);
     }
     
@@ -75,8 +107,8 @@ class MovieController extends Controller
         if(!$id){
             \Symfony\Component\Debug\header('页面丢失了',true,404);
         }
-	$actor = Actor::findOne($id);
-	$this->breadcrumbs[]=['label'=>$actor->name];
+        $actor = Actor::findOne($id);
+        $this->breadcrumbs[]=['label'=>$actor->name];
         $page = \Yii::$app->request->get('page',1);
         $rows = \Yii::$app->request->get('rows',20);
         $limit = "LIMIT ".($page-1)*$rows.",$rows";
@@ -86,7 +118,8 @@ class MovieController extends Controller
         $movies = $cmd->queryAll();
         return $this->render('list',[
             'movies'=>$movies,
-	    'breadcrumbs'=>$this->breadcrumbs
+	        'breadcrumbs'=>$this->breadcrumbs,
+            'tags'=>$this->tags
         ]);
     }
     
@@ -95,8 +128,8 @@ class MovieController extends Controller
         if(!$id){
             \Symfony\Component\Debug\header('页面丢失了',true,404);
         }
-	$cate = Category::findOne($id);
-	$this->breadcrumbs[]=['label'=>$cate->name];
+        $cate = Category::findOne($id);
+        $this->breadcrumbs[]=['label'=>$cate->name];
         $page = \Yii::$app->request->get('page',1);
         $rows = \Yii::$app->request->get('rows',20);
         $limit = "LIMIT ".($page-1)*$rows.",$rows";
@@ -105,8 +138,9 @@ class MovieController extends Controller
         $cmd = \Yii::$app->db->createCommand($sql);
         $movies = $cmd->queryAll();
         return $this->render('list',[
-	    'breadcrumbs'=>$this->breadcrumbs,
-            'movies'=>$movies
+	        'breadcrumbs'=>$this->breadcrumbs,
+            'movies'=>$movies,
+            'tags'=>$this->tags
         ]);
     }
 }

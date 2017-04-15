@@ -1,4 +1,3 @@
-
 <section class="container">
     <div class="content-wrap">
         <div class="content">
@@ -34,23 +33,7 @@
                 </div>
             </div>
 
-	<?php foreach($newmovies as $m){?>
-                <article class="excerpt excerpt-1" style="">
-                    <a class="focus" href="/movie/<?=$m['id']?>" title="<?=$m['title']?>" target="_blank" >
-                        <img class="thumb" data-original="<?=$m['poster']?>" src="<?=$m['poster']?>"
-                             alt="<?=$m['title']?>"  style="display: inline;"></a>
-                    <header><a class="cat" href="/movie/<?=$m['id']?>" title="<?=$m['name']?>" ><?=$m['name']?><i></i></a>
-                        <h2><a href="/movie/<?=$m['id']?>" title="<?=$m['title']?>" target="_blank" ><?=$m['title']?></a>
-                        </h2>
-                    </header>
-                    <p class="meta">
-                        <time class="time"><i class="glyphicon glyphicon-time"></i><?=date('Y-m-d',$m['created_at'])?></time>
-                        <span class="views"><i class="glyphicon glyphicon-eye-open"></i> 216</span>
-                        <a class="comment" href="##comment" title="评论" target="_blank" ><i class="glyphicon glyphicon-comment"></i> 4</a>
-                    </p>
-                    <p class="note"><?=$m['abstract']?></p>
-                </article>
-            <?php }?>
+            <?=$this->render('../movie/_list',['movies'=>$newmovies])?>
             <nav class="pagination" style="display: none;">
                 <ul>
                     <li class="prev-page"></li>
@@ -96,52 +79,7 @@
                 </form>
             </div>
         </div>
-        <div class="widget widget_hot">
-            <h3>最新评论文章</h3>
-            <ul>
-                <li><a title="用DTcms做一个独立博客网站（响应式模板）" href="#" ><span class="thumbnail">
-                <img class="thumb" data-original="images/201610181739277776.jpg" src="images/201610181739277776.jpg" alt="用DTcms做一个独立博客网站（响应式模板）"  style="display: block;">
-            </span><span class="text">用DTcms做一个独立博客网站（响应式模板）</span><span class="muted"><i class="glyphicon glyphicon-time"></i>
-                2016-11-01
-            </span><span class="muted"><i class="glyphicon glyphicon-eye-open"></i>88</span></a></li>
-                <li><a title="用DTcms做一个独立博客网站（响应式模板）" href="#" ><span class="thumbnail">
-                <img class="thumb" data-original="images/201610181739277776.jpg" src="images/201610181739277776.jpg" alt="用DTcms做一个独立博客网站（响应式模板）"  style="display: block;">
-            </span><span class="text">用DTcms做一个独立博客网站（响应式模板）</span><span class="muted"><i class="glyphicon glyphicon-time"></i>
-                2016-11-01
-            </span><span class="muted"><i class="glyphicon glyphicon-eye-open"></i>88</span></a></li>
-                <li><a title="用DTcms做一个独立博客网站（响应式模板）" href="#" ><span class="thumbnail">
-                <img class="thumb" data-original="images/201610181739277776.jpg" src="images/201610181739277776.jpg" alt="用DTcms做一个独立博客网站（响应式模板）"  style="display: block;">
-            </span><span class="text">用DTcms做一个独立博客网站（响应式模板）</span><span class="muted"><i class="glyphicon glyphicon-time"></i>
-                2016-11-01
-            </span><span class="muted"><i class="glyphicon glyphicon-eye-open"></i>88</span></a></li>
-                <li><a title="用DTcms做一个独立博客网站（响应式模板）" href="#" ><span class="thumbnail">
-                <img class="thumb" data-original="images/201610181739277776.jpg" src="images/201610181739277776.jpg" alt="用DTcms做一个独立博客网站（响应式模板）"  style="display: block;">
-            </span><span class="text">用DTcms做一个独立博客网站（响应式模板）</span><span class="muted"><i class="glyphicon glyphicon-time"></i>
-                2016-11-01
-            </span><span class="muted"><i class="glyphicon glyphicon-eye-open"></i>88</span></a></li>
-                <li><a title="用DTcms做一个独立博客网站（响应式模板）" href="#" ><span class="thumbnail">
-                <img class="thumb" data-original="images/201610181739277776.jpg" src="images/201610181739277776.jpg" alt="用DTcms做一个独立博客网站（响应式模板）"  style="display: block;">
-            </span><span class="text">用DTcms做一个独立博客网站（响应式模板）</span><span class="muted"><i class="glyphicon glyphicon-time"></i>
-                2016-11-01
-            </span><span class="muted"><i class="glyphicon glyphicon-eye-open"></i>88</span></a></li>
-                <li><a title="用DTcms做一个独立博客网站（响应式模板）" href="#" ><span class="thumbnail">
-                <img class="thumb" data-original="images/201610181739277776.jpg" src="images/201610181739277776.jpg" alt="用DTcms做一个独立博客网站（响应式模板）"  style="display: block;">
-            </span><span class="text">用DTcms做一个独立博客网站（响应式模板）</span><span class="muted"><i class="glyphicon glyphicon-time"></i>
-                2016-11-01
-            </span><span class="muted"><i class="glyphicon glyphicon-eye-open"></i>88</span></a></li>
-                <li><a title="用DTcms做一个独立博客网站（响应式模板）" href="#" ><span class="thumbnail">
-                <img class="thumb" data-original="images/201610181739277776.jpg" src="images/201610181739277776.jpg" alt="用DTcms做一个独立博客网站（响应式模板）"  style="display: block;">
-            </span><span class="text">用DTcms做一个独立博客网站（响应式模板）</span><span class="muted"><i class="glyphicon glyphicon-time"></i>
-                2016-11-01
-            </span><span class="muted"><i class="glyphicon glyphicon-eye-open"></i>88</span></a></li>
-                <li><a title="用DTcms做一个独立博客网站（响应式模板）" href="#" ><span class="thumbnail">
-                <img class="thumb" data-original="images/201610181739277776.jpg" src="images/201610181739277776.jpg" alt="用DTcms做一个独立博客网站（响应式模板）"  style="display: block;">
-            </span><span class="text">用DTcms做一个独立博客网站（响应式模板）</span><span class="muted"><i class="glyphicon glyphicon-time"></i>
-                2016-11-01
-            </span><span class="muted"><i class="glyphicon glyphicon-eye-open"></i>88</span></a></li>
-
-            </ul>
-        </div>
+        <?=$this->render('../inc/_comment')?>
         <div class="widget widget_sentence">
             <a href="#" target="_blank" rel="nofollow" title="专业网站建设" >
                 <img style="width: 100%" src="images//201610241224221511.jpg" alt="专业网站建设" ></a>

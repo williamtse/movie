@@ -1,7 +1,3 @@
-<?php
-use yii\widgets\Breadcrumbs;
-$this->title = '电影下载';
-?>
 <!doctype html>
 <html lang="zh-CN">
 <head>
@@ -61,14 +57,20 @@ $this->title = '电影下载';
     </form>
     <ul class="nav navbar-nav navbar-right">
       <li><a data-cont="" title="" href="/">首页</a></li>
-      <li><a data-cont="" title="列表页" href="/movie">电影下载</a></li>
-      <li><a data-cont="" title="详细页" href="/meiju">美剧下载</a></li>
+      <li><a data-cont="" title="列表页" href="/movie/index">电影下载</a></li>
+      <li><a data-cont="" title="详细页" href="/meiju/index">美剧下载</a></li>
     </ul>
   </div>
 </div>
 </nav>
 </header>
-
+<style>
+    bt{
+        padding: 5px 10px;
+        background-color: #fdfddf;
+        display: block;
+    }
+</style>
 <?=$content?>
 <footer class="footer">
 <div class="container">

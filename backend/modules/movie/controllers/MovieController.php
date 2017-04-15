@@ -6,6 +6,7 @@ use common\models\Actor;
 use common\models\Category;
 use common\models\Director;
 use common\models\MovieActor;
+use common\models\MovieBt;
 use common\models\MovieCategory;
 use common\models\MovieDirector;
 use Yii;
@@ -142,8 +143,10 @@ class MovieController extends Controller
      */
     public function actionView($id)
     {
+        $urls = MovieBt::findAll(['mid'=>$id]);
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'urls'=>$urls,
         ]);
     }
 
@@ -155,7 +158,7 @@ class MovieController extends Controller
     public function actionCreate()
     {
         $model = new Movie();
-
+        $model->created_at = time();
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             saveinfos($model);
             return $this->redirect(['view', 'id' => $model->id]);
@@ -184,6 +187,7 @@ class MovieController extends Controller
         $sql = "SELECT d.name from movie_director md LEFT JOIN director d ON d.id=md.did WHERE md.mid=$id";
         $cmd = Yii::$app->db->createCommand($sql);
         $dires = implodeArr($cmd->queryAll());
+        $model->updated_at = time();
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             saveinfos($model);
             return $this->redirect(['view', 'id' => $model->id]);
@@ -224,6 +228,29 @@ class MovieController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+
+    public function actionAddbt($id){
+        if(!$id){
+            return "<h1>404</h1>";
+        }
+        $movie = Movie::findOne($id);
+        $bt = new MovieBt();
+        $bt->mid=$id;
+        if($bt->load(Yii::$app->request->post()) && $bt->save()){
+            return $this->redirect('/movie/movie/view?id='.$id);
+        }
+        return $this->render('addbt',[
+            'movie'=>$movie,
+            'model'=>$bt,
+            'id'=>$id]);
+    }
+
+    public function actionDeleteBt($id){
+        if(!MovieBt::deleteAll(['id'=>$id])){
+            throw new Exception("删除失败");
+        }
+        return $this->redirect('/movie/movie/view?id='.$id);
     }
 }
 

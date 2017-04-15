@@ -25,19 +25,19 @@ use yii\widgets\ActiveForm;
     <div class="form-group field-poster required">
         <label class="control-label" for="poster">分类</label>
         <input type="text" id="poster" class="form-control" name="categories"
-               value="<?=$categories?implode('/',$categories):''?>" aria-required="true">
+               value="<?=isset($categories)?implode('/',$categories):''?>" aria-required="true">
         <div class="help-block"></div>
     </div>
     <div class="form-group field-poster required">
         <label class="control-label" for="poster">导演</label>
         <input type="text" id="poster" class="form-control" name="directors"
-               value="<?=$directors?implode('/',$directors):''?>" aria-required="true">
+               value="<?=isset($directors)?implode('/',$directors):''?>" aria-required="true">
         <div class="help-block"></div>
     </div>
     <div class="form-group field-poster required">
         <label class="control-label" for="poster">演员</label>
         <input type="text" id="poster" class="form-control" name="actors"
-               value="<?=$actors?implode('/',$actors):''?>" aria-required="true">
+               value="<?=isset($actors)?implode('/',$actors):''?>" aria-required="true">
         <div class="help-block"></div>
     </div>
     <?= $form->field($model, 'content')->textarea(['rows' => 6,'id'=>'editor-trigger','style'=>'height:800px']) ?>
