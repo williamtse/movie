@@ -1,4 +1,5 @@
 <?php
+use yii\widgets\Breadcrumbs;
 $this->title = '电影下载';
 ?>
 <!doctype html>
@@ -67,6 +68,7 @@ $this->title = '电影下载';
 </div>
 </nav>
 </header>
+
 <?=$content?>
 <footer class="footer">
 <div class="container">

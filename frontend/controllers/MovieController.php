@@ -8,12 +8,19 @@
 
 namespace frontend\controllers;
 use common\models\Movie;
+use common\models\Category;
 use yii\web\Controller;
 use Yii;
 use common\models\MovieDirector;
+use common\models\Actor;
+use common\models\Director;
 
 class MovieController extends Controller
 {
+    public $breadcrumbs=[[
+		'label'=>'电影',
+		'url'=>'movie/index'
+	]];
     public function actionShow(){
         if(!$id=Yii::$app->request->get('id')){
             \Symfony\Component\Debug\header('页面丢失了',true,404);
@@ -48,6 +55,8 @@ class MovieController extends Controller
         if(!$id){
             \Symfony\Component\Debug\header('页面丢失了',true,404);
         }
+	$director = Director::findOne($id);
+	$this->breadcrumbs[]=['label'=>$director->name];
         $page = \Yii::$app->request->get('page',1);
         $rows = \Yii::$app->request->get('rows',20);
         $limit = "LIMIT ".($page-1)*$rows.",$rows";
@@ -55,8 +64,9 @@ class MovieController extends Controller
                 . "md.mid=m.id WHERE md.did=$id $limit";
         $cmd = \Yii::$app->db->createCommand($sql);
         $movies = $cmd->queryAll();
-        return $this->render('movie_director',[
-            'movies'=>$movies
+        return $this->render('list',[
+            'movies'=>$movies,
+	    'breadcrumbs'=>$this->breadcrumbs
         ]);
     }
     
@@ -65,6 +75,8 @@ class MovieController extends Controller
         if(!$id){
             \Symfony\Component\Debug\header('页面丢失了',true,404);
         }
+	$actor = Actor::findOne($id);
+	$this->breadcrumbs[]=['label'=>$actor->name];
         $page = \Yii::$app->request->get('page',1);
         $rows = \Yii::$app->request->get('rows',20);
         $limit = "LIMIT ".($page-1)*$rows.",$rows";
@@ -72,8 +84,9 @@ class MovieController extends Controller
                 . "ma.mid=m.id WHERE ma.aid=$id $limit";
         $cmd = \Yii::$app->db->createCommand($sql);
         $movies = $cmd->queryAll();
-        return $this->render('movie_actor',[
-            'movies'=>$movies
+        return $this->render('list',[
+            'movies'=>$movies,
+	    'breadcrumbs'=>$this->breadcrumbs
         ]);
     }
     
@@ -82,6 +95,8 @@ class MovieController extends Controller
         if(!$id){
             \Symfony\Component\Debug\header('页面丢失了',true,404);
         }
+	$cate = Category::findOne($id);
+	$this->breadcrumbs[]=['label'=>$cate->name];
         $page = \Yii::$app->request->get('page',1);
         $rows = \Yii::$app->request->get('rows',20);
         $limit = "LIMIT ".($page-1)*$rows.",$rows";
@@ -89,7 +104,8 @@ class MovieController extends Controller
                 . "mc.mid=m.id WHERE mc.cid=$id $limit";
         $cmd = \Yii::$app->db->createCommand($sql);
         $movies = $cmd->queryAll();
-        return $this->render('movie_category',[
+        return $this->render('list',[
+	    'breadcrumbs'=>$this->breadcrumbs,
             'movies'=>$movies
         ]);
     }
