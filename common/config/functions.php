@@ -28,7 +28,161 @@ function console_log($msg, $level = 0) {
         echo "$tab$msg\n";
     }
 }
+function _fetchOneMovie($mid){
+    $url = "https://movie.douban.com/subject/$mid";
+    $dom = Simpledom::get_dom($url);
+    $info = $dom->find('#info',0);
+    //标题
+    $name = trim($dom->find('span[property="v:itemreviewed"]',0)->plaintext);
+    $title = $dom->find('h1',0)->plaintext;
+    $a1 = explode('(',$title);
+    $a2 = explode(')',$a1[1]);
+    $year = trim($a2[0]);
+    console_log("年份：$year");
+    console_log("标题：$title");
+    //上映时间
+    $showTimes = [];
+    foreach($dom->find('span[property="v:initialReleaseDate"]') as $releaseDate){
+        $showTimes[]=trim($releaseDate->plaintext);
+    }
+    $showTime= implode('/',$showTimes);
+    console_log("上映时间：$showTime");
+    //剧情简介
+    $summary = $dom->find('span[property="v:summary"]',0)->plaintext;
+    $attrs = $info->find('.attrs');
+    //海报
+    $poster_div = $dom->find('#mainpic',0);
+    $poster_img = $poster_div->find('img',0);
+    $poster_src = $poster_img->getAttribute('src');
+    $poster = get_filename($poster_src);
+    //导演
+    $director_attr = $attrs[0];
+    $directors = [];
+    foreach($director_attr->find('a') as $director_link){
+        $director_href = $director_link->getAttribute('href');
+        $director_id = explode('/',$director_href)[2];
+        $director_name= trim($director_link->plaintext);
+        console_log("导演：$director_name | $director_id");
+        $director_avatar = $this->_get_pepoe_info($director_id);
+        $directors[]=[
+            'avatar'=>$director_avatar,
+            'name'=>$director_name,
+            'id'=>$director_id
+        ];
+    }
 
+    //演员
+    if(isset($attrs[2])){
+        $actor_attr = $attrs[2];
+        $actors = [];
+        foreach($actor_attr->find('a') as $actor_link){
+            $actor_href = $actor_link->getAttribute('href');
+            $actor_id = explode('/',$actor_href)[2];
+            $actor_name= trim($actor_link->plaintext);
+            console_log("演员：$actor_name | $actor_id");
+            $actor_avatar = $this->_get_pepoe_info($actor_id);
+            $actors[]=[
+                'avatar'=>$actor_avatar,
+                'name'=>$actor_name,
+                'id'=>$actor_id
+            ];
+        }
+    }
+
+    //类型
+    $categories = [];
+    foreach($dom->find('span[property="v:genre"]') as $category_span){
+        $category_name = trim($category_span->plaintext);
+        console_log($category_name);
+        $categories[]=$category_name;
+    }
+
+    //豆瓣评分
+//        $average = floatval(trim($dom->find('strong[property="v:average"]',0)->plaintext));
+    //创建电影
+    $movie = Movie::findOne($mid);
+    if(!$movie){
+        $movie = new Movie();
+        $movie->id = $mid;
+        $movie->created_at = time();
+    }else{
+        $movie->updated_at = time();
+    }
+    $movie->title = $title;
+    $movie->poster = $poster;
+    $movie->name = $name;
+    $movie->year = $year;
+    $movie->content = $summary;
+    $movie->type = 'movie';
+    if($movie->save()){
+        //新建或更新演员
+        foreach($actors as $cast){
+            $actor = Actor::findOne(['id'=>$cast['id']]);
+            if(!$actor){
+                $actor = new Actor();
+                $actor -> id = $cast['id'];
+            }
+            $actor->name=$cast['name'];
+            $actor->avatar = $cast['avatar'];
+            if($actor->save()){
+                $movie_actor = MovieActor::findOne(['mid'=>$mid,'aid'=>$cast['id']]);
+                if(!$movie_actor){
+                    $movie_actor = new MovieActor();
+                    $movie_actor->mid = $mid;
+                    $movie_actor->aid = $cast['id'];
+                    $movie_actor->save();
+                }
+            }else{
+                console_log(__LINE__);
+                var_dump($actor->avatar);
+                var_dump($actor->errors);exit();
+            }
+
+        }
+        //新建或更新导演
+        foreach($directors as $d){
+            $director = Director::findOne($d['id']);
+            if(!$director){
+                $director = new Director();
+                $director->id = $d['id'];
+            }
+            $director->name = $d['name'];
+            $avatar = $d['avatar'];
+            $director->avatar = $avatar;
+            if($director->save()){
+                $movie_director = MovieDirector::findOne(['mid'=>$mid,'did'=>$d['id']]);
+                if(!$movie_director){
+                    $movie_director = new MovieDirector();
+                    $movie_director->mid = $mid;
+                    $movie_director->did = $d['id'];
+                    $movie_director->save();
+                }
+            }else{
+                console_log(__LINE__);
+                var_dump($director->errors);exit();
+            }
+        }
+        //分类
+        foreach($categories as $c){
+            $category = Category::findOne(['name'=>$c]);
+            if(!$category){
+                $category = new Category();
+                $category->name = $c;
+                $category->created_at = time();
+                $category->save();
+            }
+            $cid = $category->id;
+            $movie_category = MovieCategory::findOne(['cid'=>$cid,'mid'=>$mid]);
+            if(!$movie_category){
+                $movie_category = new MovieCategory();
+                $movie_category->cid = $cid;
+                $movie_category->mid = $mid;
+                $movie_category->created_at = time();
+                $movie_category->save();
+            }
+        }
+    }
+}
 function Douban_movie250(){
     $count = 50;//一次去50条
     for($start=0;$start<5;$start++){
@@ -167,11 +321,7 @@ function Douban_Movie2Db($info){
  */
 
 function Douban_FetchMovie($id){
-    $api = "https://api.douban.com/v2/movie/subject/$id";
-    $json = @file_get_contents($api);
-    $info = json_decode($json,true);
-    if(!$json) return false;
-    Douban_Movie2Db($info);
+    _fetchOneMovie($id);
 }
 
 function get_filename($path){

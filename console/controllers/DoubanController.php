@@ -9,6 +9,8 @@ use common\models\Director;
 use common\models\MovieDirector;
 use common\models\Category;
 use common\models\MovieCategory;
+use console\components\Curl;
+
 /**
  * Created by PhpStorm.
  * User: Xie
@@ -18,43 +20,116 @@ use common\models\MovieCategory;
 class DoubanController extends \yii\console\Controller
 {
     public function actionFetchMovieTop250(){
-        $multi_curl = new Multicurl();
-        $multi_curl->maxThread = 50;
+        console_log("采集开始");
+//        $multi_curl = new Multicurl();
+//        $multi_curl->maxThread = 50;
+//        $mids = [];
+//        for($page=0;$page<10;$page++){
+//            $start = $page*25;
+//            $url = "https://www.douban.com/doulist/380312/?start=$start&sort=time&sub_type=";
+//            $multi_curl->add([
+//                'url'=>$url,
+//                'args'=>[
+//                    'page'=>$page,
+//                    'url'=>$url,
+//                    'mids'=>&$mids
+//                ],
+//                'opt'=>[
+//                    CURLOPT_SSL_VERIFYHOST => 0,
+//                    CURLOPT_SSL_VERIFYPEER => 0,
+//                    CURLOPT_HEADER => 0,
+//                    CURLOPT_FOLLOWLOCATION => 1,
+//                    CURLOPT_VERBOSE => 1
+//                ],
+//            ],function($res,$args){
+//                console_log("解析top250第".($args['page']+1)."页");
+//                $dom = Simpledom::get_dom_from_string($res['content']);
+//                $items = $dom->find('.doulist-item');
+//                console_log(count($items));
+//                foreach($items as $item){
+//                    $href = $item->find('.title',0)->find('a',0)->getAttribute('href');
+//                    $arr = explode('/',$href);
+//                    $mid = $arr[4];
+//                    $args['mids'][]=$mid;
+//                    console_log($args['page'].'|'.$mid);
+////                    $this->_fetchOneMovie($mid);
+//                }
+//            });
+//        }
+//        $multi_curl->start();
+        $mids = [];
         for($page=0;$page<10;$page++){
-            $start = $page*25;
-            $url = "http://www.douban.com/doulist/380312/?start=$start&sort=time&sub_type=";
-            $multi_curl->add([
+            $content = file_get_contents('html/'.$page.'.html');
+            $dom = Simpledom::get_dom_from_string($content);
+            $items = $dom->find('.doulist-item');
+            foreach($items as $item) {
+                $href = $item->find('.title', 0)->find('a', 0)->getAttribute('href');
+                $arr = explode('/', $href);
+                $mid = $arr[4];
+                $mids[] = $mid;
+            }
+        }
+        $multi_curl2 = new Multicurl();
+        $multi_curl2->maxThread = 100;
+        var_dump($mids);
+        foreach($mids as $mid){
+            $url = "https://movie.douban.com/subject/$mid";
+            $randomIp = $this->_randomIp();
+            $multi_curl2->add([
                 'url'=>$url,
                 'args'=>[
                     'page'=>$page,
                     'url'=>$url,
+                    'mid'=>$mid
                 ],
                 'opt'=>[
                     CURLOPT_SSL_VERIFYHOST => 0,
                     CURLOPT_SSL_VERIFYPEER => 0,
                     CURLOPT_HEADER => 0,
                     CURLOPT_FOLLOWLOCATION => 1,
-                    CURLOPT_VERBOSE => 1
+                    CURLOPT_VERBOSE => 1,
+                    CURLOPT_HTTPHEADER => [
+                        'CLIENT-IP:'.$randomIp,
+                        'X-FORWARDED-FOR:'.$randomIp,
+                    ]
                 ],
             ],function($res,$args){
-                $dom = Simpledom::get_dom_from_string($res['content']);
-                foreach($dom->find('.doulist-item') as $item){
-                    $href = $item->find('.title',0)->find('a',0)->getAttribute('href');
-                    $arr = explode('/',$href);
-                    $mid = $arr[4];
-                    console_log($args['page'].'|'.$mid);
-                    $this->_fetchOneMovie($mid);
-                }
+                console_log("开始采集".$args['url']);
+                file_put_contents('html/'.$args['mid'].'.html',$res['content']);
+                $this->_fetchOneMovie($args['mid'],$res['content']);
+                console_log("{$args['mid']}采集完成");
             });
         }
-        $multi_curl->start();
+        $multi_curl2->start();
+        console_log("采集结束");
     }
     public function actionFetchOneMovie($mid){
         $this->_fetchOneMovie($mid);
     }
-    protected function _fetchOneMovie($mid){
-        $url="https://movie.douban.com/subject/$mid";
-        $dom = Simpledom::get_dom($url);
+    protected function _randomIp(){
+        return rand(1,255).'.'.rand(1,255).'.'.rand(1,255).'.'.rand(1,255);
+    }
+    protected function _get($url){
+        $ch = curl_init();
+        $url = "https://movie.douban.com/subject/1300572";
+        $header = array(
+            'CLIENT-IP:58.68.44.61',
+            'X-FORWARDED-FOR:58.68.44.61',
+        );
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER,true);
+        $page_content = curl_exec($ch);
+        curl_close($ch);
+        echo $page_content;
+    }
+    public function actionTest(){
+        $url = "https://movie.douban.com/subject/1300572";
+        $res = $this->_get($url);
+        var_dump($res);
+    }
+    protected function _fetchOneMovie($mid,$str){
+        $dom = Simpledom::get_dom_from_string($str);
         $info = $dom->find('#info',0);
         //标题
         $name = trim($dom->find('span[property="v:itemreviewed"]',0)->plaintext);
