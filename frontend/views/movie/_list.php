@@ -1,7 +1,8 @@
 <?php foreach ($movies as $movie){?>
     <article class="excerpt excerpt-1">
         <a class="focus" href="/movie/<?=$movie['id']?>" title="<?=$movie['title']?>" target="_blank" draggable="false">
-            <img class="thumb" data-original="<?=$movie['poster']?>" src="<?=$movie['poster']?>"
+            <img class="thumb" data-original="<?=Douban_GetPoster($movie['poster'],'s')?>"
+                 src="<?=Douban_GetPoster($movie['poster'],'s')?>"
                  alt="<?=$movie['title']?>" style="display: inline;" draggable="false"></a>
         <header><a class="cat" href="#" title="<?=$movie['name']?>" draggable="false"><?=$movie['name']?><i></i></a>
             <h2><a href="/movie/<?=$movie['id']?>" title="<?=$movie['title']?>"
@@ -13,7 +14,10 @@
             <a class="comment" href="##comment" title="评论" target="_blank" draggable="false">
                 <i class="glyphicon glyphicon-comment"></i> 4</a></p>
         <p class="note">
-            <?=$movie['abstract']?>
+            <?=$movie['content']?>
         </p>
     </article>
 <?php }?>
+<style>
+    p.note { text-overflow : clip; }
+</style>

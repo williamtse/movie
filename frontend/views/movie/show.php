@@ -51,7 +51,7 @@ $this->title=$movie->title.'|'.$movie->keywords;
                     }
                 ?><p>
 		<?php } ?>
-                <p><img src="<?=$movie['poster']?>"></p>
+                <p><img src="<?=Douban_GetPoster($movie['poster'],'l')?>"></p>
                 <?=$movie['content']?>
                 <h3 style="color:red">下载</h3><br>
                 <?php

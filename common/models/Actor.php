@@ -8,8 +8,9 @@ use Yii;
  * This is the model class for table "actor".
  *
  * @property integer $id
- * @property integer $name
+ * @property string $name
  * @property integer $created_at
+ * @property string $avatar
  */
 class Actor extends \yii\db\ActiveRecord
 {
@@ -27,7 +28,8 @@ class Actor extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name'], 'string'],
+            [['created_at'], 'integer'],
+            [['name', 'avatar'], 'string', 'max' => 255],
         ];
     }
 
@@ -40,6 +42,7 @@ class Actor extends \yii\db\ActiveRecord
             'id' => 'ID',
             'name' => 'Name',
             'created_at' => 'Created At',
+            'avatar' => 'Avatar',
         ];
     }
 }

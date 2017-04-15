@@ -1,4 +1,5 @@
 <?php
+include_once "functions.php";
 return [
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
     'components' => [

@@ -18,6 +18,10 @@ use Yii;
  * @property string $keywords
  * @property string $poster
  * @property string $abstract
+ * @property integer $downloads
+ * @property string $douban
+ * @property string $other_names
+ * @property string $type
  *
  * @property MovieActor[] $movieActors
  * @property MovieBt[] $movieBts
@@ -41,9 +45,10 @@ class Movie extends \yii\db\ActiveRecord
     {
         return [
             [['name', 'year', 'title', 'poster'], 'required'],
-            [['year', 'created_at', 'updated_at'], 'integer'],
-            [['content'], 'string'],
-            [['name', 'title', 'showTime', 'keywords', 'poster', 'abstract'], 'string', 'max' => 255],
+            [['year', 'created_at', 'updated_at', 'downloads'], 'integer'],
+            [['content', 'other_names'], 'string'],
+            [['name', 'title', 'showTime', 'keywords', 'poster', 'abstract', 'douban'], 'string', 'max' => 255],
+            [['type'], 'string', 'max' => 20],
         ];
     }
 
@@ -64,6 +69,10 @@ class Movie extends \yii\db\ActiveRecord
             'keywords' => 'Keywords',
             'poster' => 'Poster',
             'abstract' => 'Abstract',
+            'downloads' => 'Downloads',
+            'douban' => 'Douban',
+            'other_names' => 'Other Names',
+            'type' => 'Type',
         ];
     }
 
@@ -99,4 +108,3 @@ class Movie extends \yii\db\ActiveRecord
         return $this->hasMany(MovieDirector::className(), ['mid' => 'id']);
     }
 }
-

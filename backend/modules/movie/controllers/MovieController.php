@@ -252,5 +252,14 @@ class MovieController extends Controller
         }
         return $this->redirect('/movie/movie/view?id='.$id);
     }
+
+    public function actionFetchFromDouban(){
+        if(Yii::$app->request->isPost){
+            $id = Yii::$app->request->post('doubanId');
+            Douban_FetchMovie($id);
+            return $this->redirect('/movie/movie/update?id='.$id);
+        }
+        return $this->render('douban');
+    }
 }
 
