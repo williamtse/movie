@@ -29,6 +29,16 @@ function console_log($msg, $level = 0) {
         echo "$tab$msg\n";
     }
 }
+function _get_pepoe_info($id){
+    $url = "https://movie.douban.com/celebrity/$id";
+    $dom = @Simpledom::get_dom($url);
+    if(!$dom) return null;
+    $info_div = $dom->find('#headline',0);
+    $img = $info_div->find('img',0);
+    $img_src = $img->getAttribute('src');
+    $avatar = get_filename($img_src);
+    return $avatar;
+}
 function _fetchOneMovie($mid){
     $url = "https://movie.douban.com/subject/$mid";
     $dom = Simpledom::get_dom($url);
@@ -64,7 +74,7 @@ function _fetchOneMovie($mid){
         $director_id = explode('/',$director_href)[2];
         $director_name= trim($director_link->plaintext);
         console_log("导演：$director_name | $director_id");
-        $director_avatar = $this->_get_pepoe_info($director_id);
+        $director_avatar = _get_pepoe_info($director_id);
         $directors[]=[
             'avatar'=>$director_avatar,
             'name'=>$director_name,
@@ -81,7 +91,7 @@ function _fetchOneMovie($mid){
             $actor_id = explode('/',$actor_href)[2];
             $actor_name= trim($actor_link->plaintext);
             console_log("演员：$actor_name | $actor_id");
-            $actor_avatar = $this->_get_pepoe_info($actor_id);
+            $actor_avatar = _get_pepoe_info($actor_id);
             $actors[]=[
                 'avatar'=>$actor_avatar,
                 'name'=>$actor_name,
