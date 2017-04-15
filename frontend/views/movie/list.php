@@ -1,6 +1,7 @@
 <section class="container">
 <?php
 use yii\widgets\Breadcrumbs;
+$this->title=$type.'电影下载';
 ?>
 
 <div class="content-wrap">

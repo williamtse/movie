@@ -98,7 +98,8 @@ class MovieController extends Controller
         return $this->render('list',[
             'movies'=>$movies,
 	        'breadcrumbs'=>$this->breadcrumbs,
-            'tags'=>$this->tags
+            'tags'=>$this->tags,
+            'type'=>$director->name
         ]);
     }
     
@@ -119,7 +120,8 @@ class MovieController extends Controller
         return $this->render('list',[
             'movies'=>$movies,
 	        'breadcrumbs'=>$this->breadcrumbs,
-            'tags'=>$this->tags
+            'tags'=>$this->tags,
+            'type'=>$actor->name
         ]);
     }
     
@@ -140,7 +142,8 @@ class MovieController extends Controller
         return $this->render('list',[
 	        'breadcrumbs'=>$this->breadcrumbs,
             'movies'=>$movies,
-            'tags'=>$this->tags
+            'tags'=>$this->tags,
+            'type'=>$cate->name
         ]);
     }
 }
