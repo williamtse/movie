@@ -42,9 +42,12 @@
     </ul>
              勤记录 懂分享</div>
   <div class="navbar-header">
-    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#header-navbar" aria-expanded="false"> <span class="sr-only"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
-    <h1 class="logo hvr-bounce-in"><a href="#" title="木庄网络博客">
-            <img src="/images/201610171329086541.png" alt="木庄网络博客"></a>
+    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+            data-target="#header-navbar" aria-expanded="false">
+        <span class="sr-only"></span> <span class="icon-bar"></span>
+        <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
+    <h1 class="logo hvr-bounce-in"><a href="#" title="电影天堂">
+            <img src="/logo.jpg" alt="电影天堂" height="50px"></a>
     </h1>
   </div>
   <div class="collapse navbar-collapse" id="header-navbar">
