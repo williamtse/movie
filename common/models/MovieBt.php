@@ -13,6 +13,7 @@ use Yii;
  * @property integer $created_at
  * @property string $title
  * @property string $fmt
+ * @property integer $uid
  *
  * @property Movie $m
  */
@@ -32,8 +33,8 @@ class MovieBt extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['mid', 'created_at'], 'integer'],
-            [['bt', 'title', 'fmt'], 'required'],
+            [['mid', 'created_at', 'uid'], 'integer'],
+            [['bt', 'title', 'fmt', 'uid'], 'required'],
             [['bt'], 'string'],
             [['title', 'fmt'], 'string', 'max' => 255],
             [['mid'], 'exist', 'skipOnError' => true, 'targetClass' => Movie::className(), 'targetAttribute' => ['mid' => 'id']],
@@ -52,6 +53,7 @@ class MovieBt extends \yii\db\ActiveRecord
             'created_at' => 'Created At',
             'title' => 'Title',
             'fmt' => 'Fmt',
+            'uid' => 'Uid',
         ];
     }
 

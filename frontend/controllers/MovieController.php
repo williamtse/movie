@@ -71,7 +71,9 @@ class MovieController extends Controller
         $cmd = \Yii::$app->db->createCommand($sql);
         $categories = $cmd->queryAll();
 
-        $urls = MovieBt::findAll(['mid'=>$id]);
+        $sql = "SELECT mb.*,u.email,u.username FROM movie_bt mb LEFT JOIN user u ON u.id=mb.uid WHERE mb.mid=$id";
+        $cmd = \Yii::$app->db->createCommand($sql);
+        $urls = $cmd->queryAll();
         return $this->render('show',[
             'movie'=>$movie,
             'directors' => $directors,

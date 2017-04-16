@@ -53,28 +53,143 @@ $this->title=$movie->title.'|'.$movie->keywords;
 		<?php } ?>
                 <p><img src="<?=Douban_GetPoster($movie['poster'],'l')?>"></p>
                 <?=$movie['content']?>
-                <h3 style="color:red">下载</h3><br>
-                <?php
-                    if($urls){
-                        foreach($urls as $url){
-                            ?>
-                            <bt><span class="badge"><?=$url->fmt?></span>
-                            <a href="<?=$url->bt?>"><?=$url->title?></a>
-                            </bt>
-                <?php
-                        }
-                    }
-                ?>
             </article>
             <div class="article-tags">标签：
                 <?php
-		    if(isset($categories)){ 
+		    if(isset($categories)){
                     foreach($categories as $c){
                         ?>
                         <a href="/movie/category/<?=$c['cid']?>" rel="tag" ><?=$c['name']?></a>
                         <?php
                     }
 			}
+                ?>
+            </div>
+            <style>
+                .Button:hover {
+                    background-color: rgba(207,216,230,.1);
+                }
+                button {
+                    padding: 0;
+                    font: inherit;
+                    color: inherit;
+                    cursor: pointer;
+                    background: none;
+                    border: none;
+                    outline: none;
+                    -webkit-appearance: none;
+                    -moz-appearance: none;
+                    appearance: none;
+                }
+                input, textarea, select, button {
+                    text-rendering: auto;
+                    color: initial;
+                    letter-spacing: normal;
+                    word-spacing: normal;
+                    text-transform: none;
+                    text-indent: 0px;
+                    text-shadow: none;
+                    display: inline-block;
+                    text-align: start;
+                    margin: 0em 0em 0em 0em;
+                    font: 13.3333px Arial;
+                }
+                input, textarea, select, button, meter, progress {
+                    -webkit-writing-mode: horizontal-tb;
+                }
+                button {
+                    -webkit-appearance: button;
+                }
+                .VoteButton{
+                    background-color: #e4ebf3;
+                    border-color: #e4ebf3;
+                }
+                li.bt-item{
+                    background: white;
+                    padding: 10px;
+                    list-style: none;
+                    position: relative;
+                    border: 1px dotted #9ccff4;
+                    margin: 5px 0;
+                }
+                .vote-btns{
+                    position: absolute;
+                    top: 20px;
+                    right: 10px;
+                }
+                .VoteButton:not(:disabled):hover {
+                     background-color: #e4ebf3;
+                     border-color: #e4ebf3;
+                 }
+                .VoteButton {
+                    padding: 0 10px;
+                    color: #2d84cc;
+                    background: #ebf3fb;
+                    border-color: #ebf3fb;
+                }
+                .VoteButton--down {
+                }
+                .VoteButton-downIcon, .VoteButton-upIcon {
+                    fill: currentColor;
+                }
+                .VoteButton-downIcon {
+                    -webkit-transform: rotate(180deg);
+                    /* transform: rotate(180deg); */
+                }
+            </style>
+            <div class="relates" style="margin-bottom: 20px">
+                <div class="title"><h3>分享下载</h3></div>
+                <?php
+                if($urls){
+                    echo '<ul>';
+                    foreach($urls as $url){
+                        ?>
+                        <li class="bt-item" style="">
+                            <span style="color:brown">
+                                <img class="img-circle" style="height: 1.5em;"
+                                     src="https://www.gravatar.com/avatar/<?=md5($url['email'])?>">
+                                <a href="/user/<?=$url['uid']?>"><?=$url['username']?></a>
+                            </span>
+                            <span class="post-time"><?=date('Y-m-d',$url['created_at'])?> 发布</span>
+                            <br>
+                            <a href="thunder://<?=base64_encode('AA'.$url['bt'].'ZZ')?>">
+                                <?=$url['title']?></a>
+                            <span class="badge"><?=$url['fmt']?></span>
+                            <span class="vote-btns">
+                            <button data-typef="1" data-dtid="<?=$url['id']?>" class="Button VoteButton VoteButton--up" aria-label="好"
+                                    type="button"><svg viewBox="0 0 20 18"
+                                                       class="Icon VoteButton-upIcon Icon--triangle"
+                                                       width="9" height="16" aria-hidden="true"
+                                                       style="height: 16px; width: 9px;">
+                                    <g><path
+                                                d="M0 15.243c0-.326.088-.533.236-.896l7.98-13.204C8.57.57 9.086 0 10 0s1.43.57 1.784 1.143l7.98 13.204c.15.363.236.57.236.896 0 1.386-.875 1.9-1.955 1.9H1.955c-1.08 0-1.955-.517-1.955-1.9z"></path>
+                                    </g></svg>
+                                <!-- react-text: 162 -->
+                                    <i id="votes-<?=$url['id']?>-up" class="votes"></i>
+                                <!-- /react-text -->
+                            </button>
+                            <button data-typef="-1" data-dtid="<?=$url['id']?>" class="Button VoteButton VoteButton--down" aria-label="反对"
+                                    type="button"><svg viewBox="0 0 20 18"
+                                                       class="Icon VoteButton-downIcon Icon--triangle"
+                                                       width="9" height="16" aria-hidden="true"
+                                                       style="height: 16px; width: 9px;">
+                                    <g><path d="M0 15.243c0-.326.088-.533.236-.896l7.98-13.204C8.57.57 9.086 0 10 0s1.43.57 1.784 1.143l7.98 13.204c.15.363.236.57.236.896 0 1.386-.875 1.9-1.955 1.9H1.955c-1.08 0-1.955-.517-1.955-1.9z"></path></g>
+                                </svg>
+                                <!-- react-text: 162 -->
+                                    <i id="votes-<?=$url['id']?>-down" class="votes"></i>
+                                <!-- /react-text -->
+                            </button>
+                            </span>
+                        </li>
+                        <?php
+                    }
+                    echo '</ul>';
+                }else{
+                    ?>
+                    <p style="padding:10px;text-align:center" class="bg-info">暂无下载资源，
+                        <a href="/bt/create?id=<?=$movie->id?>">提供下载链接</a></p>
+                <?php
+                }
                 ?>
             </div>
             <div class="relates">
@@ -168,9 +283,28 @@ $this->title=$movie->title.'|'.$movie->keywords;
         </div>
     </aside>
 </section>
-
-<style>
-    .article-content pre{
-        background: "#fdfddf"
-    }
-</style>
+<script>
+    $(function(){
+        $(".VoteButton").click(function(){
+            var tdid = $(this).attr('data-dtid');
+            var type = $(this).data('typef');
+            $.ajax({
+                url:"/bt/vote",
+                data:{
+                    tdid:tdid,
+                    type:type,
+                    '<?=Yii::$app->request->csrfParam?>':'<?=Yii::$app->request->csrfToken?>'
+                },
+                type:'post',
+                dataType:'json',
+                success:function(re){
+                    if(re.status==1){
+                        $("#votes-"+tdid+"-"+(type>0?'up':'down')).html(re.votes);
+                    }else if(re.status==2){
+                        location.href='/site/login';
+                    }
+                }
+            });
+        })
+    })
+</script>

@@ -74,13 +74,13 @@
                     <span class=" fa fa-angle-down"></span>
                 </a>
                 <ul class="dropdown-menu dropdown-usermenu pull-right">
-                    <li><a href="/my/profile"> 个人资料 </a></li>
+<!--                    <li><a href="/my/profile"> 个人资料 </a></li>-->
                     <li>
                         <a href="/site/request-password-reset">
                             <span>修改密码</span>
                         </a>
                     </li>
-                    <li><a href="/my/bt">我的种子</a></li>
+<!--                    <li><a href="/my/bt">我的种子</a></li>-->
                     <li><a href="/site/logout"><i class="fa fa-sign-out pull-right"></i>退出</a></li>
                 </ul>
             </li>
@@ -95,6 +95,10 @@
         padding: 5px 10px;
         background-color: #fdfddf;
         display: block;
+    }
+    .content{
+        background: white;
+        padding: 0 10px;
     }
 </style>
 <?=$content?>
