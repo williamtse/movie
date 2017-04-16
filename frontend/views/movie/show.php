@@ -165,7 +165,9 @@ $this->title=$movie->title.'|'.$movie->keywords;
                                                 d="M0 15.243c0-.326.088-.533.236-.896l7.98-13.204C8.57.57 9.086 0 10 0s1.43.57 1.784 1.143l7.98 13.204c.15.363.236.57.236.896 0 1.386-.875 1.9-1.955 1.9H1.955c-1.08 0-1.955-.517-1.955-1.9z"></path>
                                     </g></svg>
                                 <!-- react-text: 162 -->
-                                    <i id="votes-<?=$url['id']?>-up" class="votes"></i>
+                                    <i id="votes-<?=$url['id']?>-up" class="votes">
+                                        <?=$url['votes_up']?>
+                                    </i>
                                 <!-- /react-text -->
                             </button>
                             <button data-typef="-1" data-dtid="<?=$url['id']?>" class="Button VoteButton VoteButton--down" aria-label="反对"
@@ -176,7 +178,9 @@ $this->title=$movie->title.'|'.$movie->keywords;
                                     <g><path d="M0 15.243c0-.326.088-.533.236-.896l7.98-13.204C8.57.57 9.086 0 10 0s1.43.57 1.784 1.143l7.98 13.204c.15.363.236.57.236.896 0 1.386-.875 1.9-1.955 1.9H1.955c-1.08 0-1.955-.517-1.955-1.9z"></path></g>
                                 </svg>
                                 <!-- react-text: 162 -->
-                                    <i id="votes-<?=$url['id']?>-down" class="votes"></i>
+                                    <i id="votes-<?=$url['id']?>-down" class="votes">
+                                        <?=$url['votes_down']?>
+                                    </i>
                                 <!-- /react-text -->
                             </button>
                             </span>
