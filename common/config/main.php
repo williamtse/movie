@@ -1,6 +1,7 @@
 <?php
 include_once "functions.php";
 return [
+    'name'=>'电影天堂',
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
     'components' => [
         'cache' => [

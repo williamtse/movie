@@ -62,6 +62,29 @@
       <li><a data-cont="" title="" href="/">首页</a></li>
       <li><a data-cont="" title="列表页" href="/movie/index">电影下载</a></li>
       <li><a data-cont="" title="详细页" href="/meiju/index">美剧下载</a></li>
+        <?php if(Yii::$app->user->isGuest){ ?>
+        <li><a data-cont="" title="详细页" href="/site/login">登陆</a></li>
+        <li><a data-cont="" title="详细页" href="/site/signup">注册</a></li>
+            <?php }else{ ?>
+            <li class="">
+                <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                    <img class="img-circle" style="height: 1.5em" src="https://www.gravatar.com/avatar/
+<?=md5(Yii::$app->user->identity->email)?>"
+                         alt=""> <?=Yii::$app->user->identity->username?>
+                    <span class=" fa fa-angle-down"></span>
+                </a>
+                <ul class="dropdown-menu dropdown-usermenu pull-right">
+                    <li><a href="/my/profile"> 个人资料 </a></li>
+                    <li>
+                        <a href="/site/request-password-reset">
+                            <span>修改密码</span>
+                        </a>
+                    </li>
+                    <li><a href="/my/bt">我的种子</a></li>
+                    <li><a href="/site/logout"><i class="fa fa-sign-out pull-right"></i>退出</a></li>
+                </ul>
+            </li>
+        <?php }?>
     </ul>
   </div>
 </div>

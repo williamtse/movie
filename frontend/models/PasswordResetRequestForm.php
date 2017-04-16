@@ -20,13 +20,20 @@ class PasswordResetRequestForm extends Model
     {
         return [
             ['email', 'trim'],
-            ['email', 'required'],
-            ['email', 'email'],
+            ['email', 'required','message'=>'邮箱不能为空'],
+            ['email', 'email',"message"=>'无效的邮箱地址'],
             ['email', 'exist',
                 'targetClass' => '\common\models\User',
                 'filter' => ['status' => User::STATUS_ACTIVE],
-                'message' => 'There is no user with this email address.'
+                'message' => '这里没有这个邮箱的用户'
             ],
+        ];
+    }
+
+    public function attributeLabels()
+    {
+        return [
+            'email'=>'邮箱'
         ];
     }
 
@@ -53,7 +60,6 @@ class PasswordResetRequestForm extends Model
                 return false;
             }
         }
-
         return Yii::$app
             ->mailer
             ->compose(
@@ -62,7 +68,7 @@ class PasswordResetRequestForm extends Model
             )
             ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name . ' robot'])
             ->setTo($this->email)
-            ->setSubject('Password reset for ' . Yii::$app->name)
+            ->setSubject('密码重置- ' . Yii::$app->name)
             ->send();
     }
 }
